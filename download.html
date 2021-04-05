@@ -32,11 +32,7 @@
 <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Medical ID</a>
-        <form action="searchPatient.php"></form>
-        <input class="form-control form-control-dark w-100" type="text" placeholder="Search Patient"
-            aria-label="Search Patient" name="searchPatient" id="searchPatient">
-        <button type="submit" class="searchSubmit" id="searchPatientButton"><i class="fa fa-search"></i></button>
-        </form>
+        
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
                 <a class="nav-link" href="/signin.html">Sign out</a>
@@ -74,27 +70,11 @@
                             </a>
                         </li>
 
-                        <!--<li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="bar-chart-2"></span>
-                  Reports
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="layers"></span>
-                  Integrations
-                </a>
-              </li>-->
-
                     </ul>
 
                     <h6
                         class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                         <span>All Data</span>
-                        <!--<a class="d-flex align-items-center text-muted" href="#">
-                <span data-feather="plus-circle"></span>
-              </a>-->
                     </h6>
 
                     <ul class="nav flex-column mb-2">
@@ -104,30 +84,6 @@
                                 Download All Data
                             </a>
                         </li>
-                        <!--
-
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Last quarter
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Social engagement
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Year-end sale
-                </a>
-              </li>
-
-            -->
-
-
                     </ul>
                 </div>
             </nav>
@@ -137,253 +93,27 @@
                     <h1 class="h2">Download Patient Records</h1>
                 </div>
             </main>
-            <!--
-        <table id="table" data-locale="en-US" data-toggle="table" data-search="true" data-show-columns="true"
-          data-show-fullscreen="true" data-show-columns="true" data-show-columns-toggle-all="true"
-          data-click-to-select="true" data-detail-formatter="detailFormatter" data-minimum-count-columns="2"
-          data-show-pagination-switch="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]"
-          data-sortable="true">
-          <thead>
-            <tr class="tr-class-1">
-              <th data-field="name" rowspan="2" data-valign="middle" data-sortable="true">Name</th>
-              <th colspan="6">Details</th>
-            </tr>
-            <tr class="tr-class-2">
-              <th data-field="quantity" data-sortable="true">Gender</th>
-              <th data-field="rush" data-sortable="true">DOB</th>
-              <th data-field="date" data-sortable="true">City</th>
-              <th data-field="actions" data-sortable="true">Home Phone</th>
-              <th data-field="eproof" data-sortable="true">Time Checked In</th>
-              <th data-field="order" data-sortable="true">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="tbody">
 
-
-            <tr id="tr-id-0" class="tr-class-0 johnsmith" data-title="bootstrap table" data-name="Ash Ketchum">
-              <td id="td-id-0" class="td-class-0" data-title="bootstrap table">
-                Ash Ketchum
-              </td>
-              <td data-value="100">Male</td>
-              <td data-text="no">12/12/1980</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)238-1220</td>
-              <td data-text="">04/01/21 3:40 PM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-
-            <tr id="tr-id-0" class="tr-class-0 janesmith" data-title="bootstrap table" data-name="Misty">
-              <td id="td-id-0" class="td-class-0" data-title="bootstrap table">
-                Misty
-              </td>
-              <td data-value="100">Female</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">03/31/21 8:30 AM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-            <tr id="tr-id-0" class="tr-class-0 janesmith" data-title="bootstrap table" data-name="Brock">
-              <td id="td-id-0" class="td-class-0" data-title="bootstrap table">
-                Brock
-              </td>
-              <td data-value="100">Female</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">03/31/21 8:31 AM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-            <tr id="tr-id-0" class="tr-class-0 janesmith" data-title="bootstrap table" data-name="Gary Oak">
-              <td id="td-id-0" class="td-class-0" data-title="bootstrap table">
-                Gary Oak
-              </td>
-              <td data-value="100">Female</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">03/31/21 8:32 AM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-            <tr id="tr-id-0" class="tr-class-0 janesmith" data-title="bootstrap table" data-name="Professor Oak">
-              <td id="td-id-0" class="td-class-0" data-title="bootstrap table">
-                Professor Oak
-              </td>
-              <td data-value="100">Female</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">03/31/21 8:33 AM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-0" data-title="bootstrap table" data-name="Steve Rodgers">
-              <td id="td-test-name" class="td-class-0" data-title="bootstrap table">
-                Steve Rodgers
-              </td>
-              <td data-value="100">Male</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">03/31/21 8:33 AM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-0" data-title="bootstrap table" data-name="Tony Stark">
-              <td id="td-test-name" class="td-class-0" data-title="bootstrap table">
-                Tony Stark
-              </td>
-              <td data-value="100">Male</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">03/31/21 8:32 AM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-0" data-title="bootstrap table" data-name="Thor Odinson">
-              <td id="td-test-name" class="td-class-0" data-title="bootstrap table">
-                Thor Odinson
-              </td>
-              <td data-value="100">Male</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">03/31/21 8:37 AM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-
-            <tr id="tr-id-1" class="tr-class-0" data-title="bootstrap table" data-name="Natasha Romanoff">
-              <td id="td-test-name" class="td-class-0" data-title="bootstrap table">
-                Natasha Romanoff
-              </td>
-              <td data-value="100">Male</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">03/12/21 8:30 AM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-0" data-title="bootstrap table" data-name="Bruce Banner">
-              <td id="td-test-name" class="td-class-0" data-title="bootstrap table">
-                Bruce Banner
-              </td>
-              <td data-value="100">Male</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">03/21/21 10:30 AM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-0" data-title="bootstrap table" data-name="Clark Kent">
-              <td id="td-test-name" class="td-class-0" data-title="bootstrap table">
-                Clark Kent
-              </td>
-              <td data-value="100">Male</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">03/16/21 3:30 PM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-0" data-title="bootstrap table" data-name="Bruce Wayne">
-              <td id="td-test-name" class="td-class-0" data-title="bootstrap table">
-                Bruce Wayne
-              </td>
-              <td data-value="100">Male</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">02/25/21 8:30 PM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-0" data-title="bootstrap table" data-name="Diana Prince">
-              <td id="td-test-name" class="td-class-0" data-title="bootstrap table">
-                Diana Prince
-              </td>
-              <td data-value="100">Male</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">01/31/21 8:30 AM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-
-            <tr id="tr-id-1" class="tr-class-0" data-title="bootstrap table" data-name="Hal Jordan">
-              <td id="td-test-name" class="td-class-0" data-title="bootstrap table">
-                Hal Jordan
-              </td>
-              <td data-value="100">Male</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">12/01/20 10:30 AM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-
-            <tr id="tr-id-1" class="tr-class-0" data-title="bootstrap table" data-name="Barry Allen">
-              <td id="td-test-name" class="td-class-0" data-title="bootstrap table">
-                Barry Allen
-              </td>
-              <td data-value="100">Male</td>
-              <td data-text="no">12/12/1985</td>
-              <td>Auburn Hills</td>
-              <td data-text="">(248)765-8464</td>
-              <td data-text="">10/12/12 4:30 PM</td>
-              <td data-i18n="Actions">
-                <a class="like" href="#" title="Like"><i class="fas fa-search"></i></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-    -->
         </div>
         <div class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 downloadButton">
+            <label for="datepicker"><h3>Select Timeframe:</h3></label>
             <input id="datepicker" type="text" name="daterange" value="01/01/2018 - 01/15/2018" />
         </div>
         <div class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 downloadButton">
-            <button type="button" class="btn btn-info btn-lg">Download Records</button>
+          <form action="/downloadAll.php" method="POST">
+            <button type="button" class="btn btn-primary btn-lg">Download Records</button>
+          </form>
         </div>
     </div>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script>
+        window.jQuery || document.write('<script src="js/vendor/jquery-slim.min.js"><\/script>')
+    </script>
     <script src="js/vendor/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
@@ -423,16 +153,14 @@
                 var patientRows = $("tbody#tbody").find('[data-name*="' + searchValue + '"]');
                 patientRows.show();
             });
-        });
-    </script>
-    <script>
-        $(function () {
+            $(function () {
             $('input[name="daterange"]').daterangepicker({
                 opens: 'left'
             }, function (start, end, label) {
                 console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' +
                     end.format('YYYY-MM-DD'));
             });
+        });
         });
     </script>
 
