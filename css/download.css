@@ -114,7 +114,7 @@ body {
       padding-bottom: 15px;
   }
 
-  .downloadButton{
+  .downloadCenter{
       text-align: center;
   }
 
@@ -123,6 +123,26 @@ body {
       width: 300px;
       text-align: center;
       font-size: x-large;
+      margin-top: 20px;
+      margin-bottom: 20px;
+  }
+
+  .centerTable{
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .testClass{
+    color:purple;
+  }
+
+  a.selectPatient{
+    background: url('/local-web-server/assets/searchIcon.jpg') no-repeat;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    background-size:contain;
   }
   /*
    * Utilities
