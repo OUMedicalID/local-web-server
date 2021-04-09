@@ -29,12 +29,11 @@
 
 </head>
 
+
+
 <body>
   <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Medical ID</a>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Search Patient"
-      aria-label="Search Patient" name="searchPatient" id="searchPatient">
-    <button type="submit" class="searchSubmit" id="searchPatientButton"><i class="fa fa-search"></i></button>
     <ul class="navbar-nav px-3">
       <li class="nav-item text-nowrap">
         <a class="nav-link" href="/signin.html">Sign out</a>
@@ -90,42 +89,22 @@
       </nav>
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 downloadCenter">
         <div class="border-bottom pageTitle">
-          <h1 class="h2">Download Patient Records<a class="selectPatient"></a></h1>
+          <h1 class="h2">Download Patient Records</h1>
         </div>
         <div class="downloadCenter">
-          <label for="datepicker">
-            <h3>Select Timeframe:</h3>
-          </label>
-          <input id="datepicker" type="text" name="daterange" value="01/01/2018 - 01/15/2018" />
-        </div>
-        <div class="downloadCenter">
-          <form action="/downloadAll.php" method="POST">
-            <button type="button" class="btn btn-primary btn-lg">Download Records</button>
+          <form action="download.php" method="post">
+            <label for="datepicker">
+              <h3>Select Timeframe:</h3>
+            </label>
+            <input id="datepicker"  type="text" name="datepicker" value="01/01/2018 - 01/15/2018" />
+            <input id = "startDate" name = "startDate" type = "hidden" value = "" placeholder="startDate"/>
+            <input id = "endDate" name = "endDate" type = "hidden" value = "" placeholder="endDate"/>
+            <div>
+              <button type="submit" id="downloadSubmit" name="downloadSubmit" class="btn btn-primary btn-lg">Download
+                Records</button>
+            </div>
           </form>
         </div>
-        <table id="table" style="margin-top: 20px;" data-locale="en-US" data-toggle="table" data-search="true"
-          data-show-columns="true" data-show-fullscreen="true" data-show-columns="true"
-          data-show-columns-toggle-all="true" data-click-to-select="true" data-detail-formatter="detailFormatter"
-          data-minimum-count-columns="2" data-show-pagination-switch="true" data-pagination="true"
-          data-page-list="[10, 25, 50, 100, all]" data-sortable="true">
-          <thead>
-            <tr class="tr-class-1">
-              <th data-field="name" rowspan="2" data-valign="middle" data-sortable="true">Name</th>
-              <th colspan="6">Details</th>
-            </tr>
-            <tr class="tr-class-2">
-              <th data-field="quantity" data-sortable="true">Gender</th>
-              <th data-field="rush" data-sortable="true">DOB</th>
-              <th data-field="date" data-sortable="true">City</th>
-              <th data-field="actions" data-sortable="true">Home Phone</th>
-              <th data-field="eproof" data-sortable="true">Time Checked In</th>
-              <th data-field="order" data-sortable="true">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="tbody">
-            <tr id="patientRecords"></tr>
-          </tbody>
-        </table>
       </main>
     </div>
   </div>
@@ -159,275 +138,21 @@
 
   <!-- Graphs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+
   <script>
     $(document).ready(function () {
 
-      var patientInfo = [];
-
-      fetch('https://swapi.dev/api/people/',{mode: 'cors'})
-        .then(response => response.json())
-        .then(data => console.log(data.results));
-        //patientInfo.push(data.results));
-
-
-      var myArray = new Array();
-      myArray[0] = 1;
-      myArray[1] = 2.218;
-      myArray[2] = 33;
-      myArray[3] = 114.94;
-      myArray[4] = 5;
-      myArray[5] = 33;
-      myArray[6] = 114.980;
-      myArray[7] = 5;
-
-      /*
-      var myTable = "<table><tr class='tr-class-2'>";
-      myTable += "<th data-field='name' rowspan='2' data-valign='middle' data-sortable='true'>Name</th>";
-      myTable += "<th colspan='6'>Details</th></tr>'<tr class='tr-class-2'>";
-      myTable += "<th data-field='quantity' data-sortable='true'>Gender</th>";
-      myTable += "<th data-field='rush' data-sortable='true'>DOB</th>";
-      myTable += "<th data-field='date' data-sortable='true'>City</th>";
-      myTable += "<th data-field='actions' data-sortable='true'>Home Phone</th>";
-      myTable += "<th data-field='eproof' data-sortable='true'>Time Checked In</th>";
-      myTable += "<th data-field='order' data-sortable'true'>Actions</th>";
-      myTable += "</tr></thead><tbody id='tbody'>";
-      myTable += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Ash Ketchum'>";
-      myTable += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Ash Ketchum</td>";
-      myTable += "<td data-value='100'>Male</td>";
-      myTable += "<td data-text='no'>12/12/1980</td>";
-      myTable += "<td>Auburn Hills</td>";
-      myTable += "<td data-text='''>(248)238-1220</td>";
-      myTable += "<td data-text=''>04/01/21 3:40 PM</td>";
-      myTable += "<td data-i18n='Actions'>";
-      myTable += "<a class='like' href='#' title='Like'><i class='fas fa-search'></i></a>";
-      myTable += "</td></tr>";
-      myTable += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Gary Oak'>";
-      myTable += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Gary Oak</td>";
-      myTable += "<td data-value='100'>Male</td>";
-      myTable += "<td data-text='no'>12/12/1980</td>";
-      myTable += "<td>Auburn Hills</td>";
-      myTable += "<td data-text='''>(248)238-1220</td>";
-      myTable += "<td data-text=''>04/01/21 3:40 PM</td>";
-      myTable += "<td data-i18n='Actions'>";
-      myTable += "<a class='like' href='#' title='Like'><i class='fas fa-search'></i></a>";
-      myTable += "</td></tr>";
-      myTable += "</tbody></table>";
-        */
-
-      var patientRecords =
-        "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Ash Ketchum'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Ash Ketchum</td>";
-      patientRecords += "<td data-value='100'>Male</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Pallet Town</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords +=
-        "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Delia Ketchum'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Delia Ketchum</td>";
-      patientRecords += "<td data-value='100'>Female</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Pallet Town</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Gary Oak'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Gary Oak</td>";
-      patientRecords += "<td data-value='100'>Male</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Pallet Town</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Daisy Oak'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Daisy Oak</td>";
-      patientRecords += "<td data-value='100'>Female</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Pallet Town</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords +=
-        "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Professor Oak'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Professor Oak</td>";
-      patientRecords += "<td data-value='100'>Male</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Pallet Town</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Brock'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Brock</td>";
-      patientRecords += "<td data-value='100'>Male</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Pewter City</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Misty'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Misty</td>";
-      patientRecords += "<td data-value='100'>Female</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Cerulean City</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Lt. Surge'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Lt. Surge</td>";
-      patientRecords += "<td data-value='100'>Male</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Vermilion City</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Erica'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Erica</td>";
-      patientRecords += "<td data-value='100'>Female</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Celedon City</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Koga'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Koga</td>";
-      patientRecords += "<td data-value='100'>Male</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Fuchsia City</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Sabrina'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Sabrina</td>";
-      patientRecords += "<td data-value='100'>Female</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Saffron City</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Blaine'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Blaine</td>";
-      patientRecords += "<td data-value='100'>Male</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Cinnabar Island</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Giovani'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Giovani</td>";
-      patientRecords += "<td data-value='100'>Male</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Veridian City</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Lorelai'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Lorelai</td>";
-      patientRecords += "<td data-value='100'>Female</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Pokemon League</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Bruno'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Bruno</td>";
-      patientRecords += "<td data-value='100'>Male</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Pokemon League</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Agatha'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Agatha</td>";
-      patientRecords += "<td data-value='100'>Female</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Pokemon League</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-
-      patientRecords += "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Lance'>";
-      patientRecords += "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>Lance</td>";
-      patientRecords += "<td data-value='100'>Male</td>";
-      patientRecords += "<td data-text='no'>12/12/1980</td>";
-      patientRecords += "<td>Pokemon League</td>";
-      patientRecords += "<td data-text='''>(248)238-1220</td>";
-      patientRecords += "<td data-text=''>04/01/21 3:40 PM</td>";
-      patientRecords += "<td data-i18n='Actions'>";
-      patientRecords += "<a class='selectPatient' href='#' title='Like'></a>";
-      patientRecords += "</td></tr>";
-      patientRecords += "";
-
-      document.getElementById('tbody').innerHTML = patientRecords;
-
-      $("#searchPatient").keypress(function (e) {
-        if (e.which == 13) {
-          $("#searchPatientButton").click();
-        }
-      });
-      $("#searchPatientButton").click(function (e) {
-
-        //Hide table rows when search and/or button are clicked
-        $("#tbody").children().hide();
-
-        //Show table rows based on the row class names that are like the search input
-        var searchValue = $("#searchPatient").val();
-        var patientRows = $("tbody#tbody").find('[data-name*="' + searchValue + '"]');
-        patientRows.show();
-      });
+      $("#datepicker").attr("value", "");
       $(function () {
-        $('input[name="daterange"]').daterangepicker({
+        $('input[name="datepicker"]').daterangepicker({
           opens: 'left'
         }, function (start, end, label) {
           console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' +
             end.format('YYYY-MM-DD'));
+          $("#startDate").attr("value", start.format('YYYY-MM-DD'));
+          $("#endDate").attr("value", end.format('YYYY-MM-DD'));
+          var startVal = $("#startDate").val();
+          console.log(startVal);
         });
       });
     });
