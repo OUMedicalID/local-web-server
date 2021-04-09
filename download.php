@@ -1,0 +1,58 @@
+<?php
+
+//Change info to local web server when ready
+$servername = "localhost";
+$username = "tlliu";
+$password = "TacoBell1";
+$dbname = "medicalid";
+
+//Website Method
+$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); // Initialize the connection.
+//$date = mysql_real_escape_string($date), prevents sql injection? Look at it later
+//$startDate = '2011-06-01';
+//$endDate = '2019-06-01';
+$startDate = $_POST['startDate'];
+$endDate = $_POST['endDate'];
+//$sql    = "SELECT * FROM users where MID_Name like :likeSearch";
+$sql = "SELECT * from users WHERE MID_AccessDate >= '" . $startDate . "'AND MID_AccessDate <= '" . $endDate . "'";
+//When new database is put in
+//$sql    = "SELECT * FROM users where MID_Name like :likeSearch order by MID_WhateverAccessDate desc";
+$stmt = $conn->prepare($sql);
+//$stmt->execute(['likeSearch' => $likeSearch]);
+$stmt->execute();
+$patientRecords = '';
+
+//echo $date;
+
+//if ($stmt) {
+
+if ($stmt->execute()) {
+    echo "execute true";
+} else {
+    echo "Didn't do shit";
+}
+if (isset($_POST['downloadSubmit'])) {
+    while ($row = $stmt->fetch()) {
+        $patientRecords .= "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='" . $row["MID_Name"] . "'>";
+        $patientRecords .= "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>" . $row["MID_Name"] . "</td>";
+        $patientRecords .= "<td data-value='100'>" . $row["MID_Gender"] . "</td>";
+        $patientRecords .= "<td data-text='no'>" . $row["MID_Birthday"] . "</td>";
+        $patientRecords .= "<td>" . $row["MID_City"] . "</td>";
+        $patientRecords .= "<td data-text=''>" . $row["MID_HomePhone"] . "</td>";
+        //Change conditions to check-in time when ready
+        $patientRecords .= "<td data-text=''>" . $row["MID_Conditions"] . "</td>";
+        $patientRecords .= "<td data-i18n='Actions'>";
+        $patientRecords .= "<a class='like' href='#' title='Like'><i class='fas fa-search'></i></a>";
+        $patientRecords .= "</td></tr>";
+    }
+} else {
+    echo "Not working either";
+}
+
+//} else {
+//  echo 'Data Not found';
+//}
+
+// echo Everytjing
+
+echo $patientRecords;
