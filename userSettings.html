@@ -128,7 +128,7 @@
   
             
    <h4 class="h4">User Info</h4>  
-   <form>
+   <form action="userSettings.php" method="POST">
   <div class="form-row">
     <div class="col">
       <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="First name">
@@ -137,10 +137,9 @@
       <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Last name">
     </div>
   </div>
-</form>
            
    
-   
+   <br>
    
 <h4 class="h4">Update Password</h4>
           <div class="card">
@@ -158,6 +157,13 @@
       <input type="password" id="confirmNewPassword" class="form-control" name="confirmNewPassword" placeholder="Confirm New Password" required>
       <div class="checkbox mb-3"></div>
     </div>
+
+</div>
+<br>
+<input type="submit" class="btn btn-primary" value="Submit"></button>
+
+</form>
+</main>
               
               
     <!-- Bootstrap core JavaScript
