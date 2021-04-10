@@ -9,7 +9,7 @@ $dbname = "medicalid";
 //Website Method
 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); // Initialize the connection.
 $search = $_POST["search"];
-$sql    = "SELECT * FROM users where MID_Name like :likeSearch";
+$sql    = "SELECT * FROM users WHERE MID_Name LIKE :likeSearch ORDER BY MID_AccessDate DESC";
 //When new database is put in
 //$sql    = "SELECT * FROM users where MID_Name like :likeSearch order by MID_WhateverAccessDate desc";
 $likeSearch = $search . "%";
@@ -26,7 +26,7 @@ while ($row = $stmt->fetch()) {
     $patientRecords .= "<td>" . $row["MID_City"] . "</td>";
     $patientRecords .= "<td data-text=''>" . $row["MID_HomePhone"] . "</td>";
     //Change conditions to check-in time when ready
-    $patientRecords .= "<td data-text=''>" . $row["MID_Conditions"] . "</td>";
+    $patientRecords .= "<td data-text=''>" . $row["MID_AccessDate"] . "</td>";
     $patientRecords .= "<td data-i18n='Actions'>";
     $patientRecords .= "<a class='like' href='#' title='Like'><i class='fas fa-search'></i></a>";
     $patientRecords .= "</td></tr>";
