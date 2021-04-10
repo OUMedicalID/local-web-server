@@ -37,7 +37,7 @@
     </form>
     <ul class="navbar-nav px-3">
       <li class="nav-item text-nowrap">
-        <a class="nav-link" href="/signin.html">Sign out</a>
+        <a class="nav-link" href="signin.html">Sign out</a>
       </li>
     </ul>
   </nav>
@@ -54,19 +54,19 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="records.html">
+              <a class="nav-link active" href="records.php">
                 <span data-feather="search"></span>
                 Search Records
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="userSettings.html">
                 <span data-feather="tool"></span>
                 Account Settings
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="adminSettings.html">
                 <span data-feather="settings"></span>
                 Admin Settings
               </a>
@@ -175,7 +175,7 @@
 
             //Website Method
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); // Initialize the connection.
-            $stmt = $conn->query("SELECT * FROM users");
+            $stmt = $conn->query("SELECT * FROM users ORDER BY MID_AccessDate DESC");
             $patientRecords = '';
 
             //if ($stmt) {
@@ -187,7 +187,7 @@
               $patientRecords .= "<td>" . $row["MID_City"] . "</td>";
               $patientRecords .= "<td data-text=''>" . $row["MID_HomePhone"] . "</td>";
               //Change conditions to check-in time when ready
-              $patientRecords .= "<td data-text=''>" . $row["MID_Conditions"] . "</td>";
+              $patientRecords .= "<td data-text=''>" . $row["MID_AccessDate"] . "</td>";
               $patientRecords .= "<td data-i18n='Actions'>";
               $patientRecords .= "<a class='like' href='#' title='Like'><i class='fas fa-search'></i></a>";
               $patientRecords .= "</td></tr>";
@@ -258,7 +258,7 @@
 
           //For the search bar 
           $.ajax({
-            url: "practicePhp2.php",
+            url: "searchPageAjax.php",
             method: "post",
             data: {
               //search is what is sent to the PHP file, searchValue is the value from the search input box
