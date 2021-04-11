@@ -1,8 +1,9 @@
 <?php
+include("mysqlCredentials.php");
 date_default_timezone_set('US/Eastern');
 $servername = "localhost";
 $username = "root";
-$password = "medIDOU002!";
+$password = $MYSQL_Password;
 $dbname = "localWebServer";
 
 if(isset($_POST["signin"])){
