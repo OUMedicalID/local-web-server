@@ -1,5 +1,4 @@
 <?php
-session_start();
 date_default_timezone_set('US/Eastern');
 $servername = "localhost";
 $username = "root";
@@ -20,6 +19,7 @@ if(isset($_POST["signin"])){
   if (password_verify($_POST["password"], $row["password"])) {
     // User authenticated.
 
+    session_start();
     $_SESSION["isLoggedIn"] = true;
     $_SESSION["username"] = $row["username"];
     $_SESSION["shaPass"] = hash("sha512", $_POST["password"]);
