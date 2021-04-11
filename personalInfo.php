@@ -1,5 +1,6 @@
 <?php
 include("AES.php");
+include("mysqlCredentials.php"); 
 session_start();
 if(!isset($_SESSION["isLoggedIn"]))exit();
 // We could also do a POST.
@@ -9,7 +10,7 @@ $id = (int)$_GET["id"];
 
 $servername = "localhost";
 $username = "root";
-$password = "medIDOU002!";
+$password = $MYSQL_Password;
 $dbname = "localWebServer";
 
 // Get the staffer's encrypted private key and decrypt it.
