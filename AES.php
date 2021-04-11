@@ -18,9 +18,9 @@ function encrypt($pass, $data){
 	return $encrypted;
 }
 
-function decrypt($pass, $data){
+function decrypt($hash, $data){
 
-	$encryption_key = substr(hash('sha512', $pass),32);
+	$encryption_key = substr($hash,32);
 	$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(AES_256_CBC));
 	$parts = explode(':', $data);
 	$decrypted = openssl_decrypt(base64_encode(hex2bin($parts[0])), AES_256_CBC, $encryption_key, 0, hex2bin($parts[1]));

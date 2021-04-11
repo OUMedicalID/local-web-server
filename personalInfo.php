@@ -1,4 +1,41 @@
-<!doctype html>
+<?php
+include("AES.php");
+session_start();
+if(!isset($_SESSION["isLoggedIn"]))exit();
+// We could also do a POST.
+if(!isset($_GET["id"]))exit();
+$id = (int)$_GET["id"];
+
+
+$servername = "localhost";
+$username = "root";
+$password = "medIDOU002!";
+$dbname = "localWebServer";
+
+// Get the staffer's encrypted private key and decrypt it.
+
+$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); // Initialize the connection.
+$stmt = $conn->prepare("SELECT * FROM staff WHERE username=:username"); 
+$stmt->execute(['username' => $_SESSION["username"]]); 
+$row = $stmt->fetch(); 
+$sodium = hex2bin(decrypt($_SESSION["shaPass"], $row["localKey"]));
+
+
+// Grab the patient. record
+
+$stmt = $conn->prepare("SELECT * FROM patients WHERE record_ID=:id"); 
+$stmt->execute(['id' => $id]); 
+$patientData = $stmt->fetch(); 
+
+function decryptSodium($data, $sodium){
+  $data = sodium_crypto_box_seal_open(hex2bin($data), $sodium);
+  if($data == "")$data = "** Not Filled Out **";
+  return $data;
+}
+
+
+
+?><!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -147,52 +184,52 @@
   <fieldset disabled>
     <div class="form-group">
       <label for="disabledTextInput">Name</label>
-      <input type="text" id="disabledTextInput" class="form-control" value="Name">
+      <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_Name"], $sodium); ?>">
     </div>
 
     <div class="form-group">
       <label for="disabledTextInput">Birthdate</label>
-      <input type="text" id="disabledTextInput" class="form-control" value="Birthdate">
+      <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_Birthday"], $sodium); ?>">
     </div>
 
     <div class="form-group">
       <label for="disabledSelect">Gender</label>
-      <input type="text" id="disabledTextInput" class="form-control" value="Gender">
+      <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_Gender"], $sodium); ?>">
     </div>
 
     <div class="form-group">
       <label for="disabledTextInput">Address 1</label>
-      <input type="text" id="disabledTextInput" class="form-control" value="Address1">
+      <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_Address1"], $sodium); ?>">
     </div>
 
     <div class="form-group">
       <label for="disabledTextInput">Address 2</label>
-      <input type="text" id="disabledTextInput" class="form-control" value="Address2">
+      <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_Address2"], $sodium); ?>">
     </div>
 
     <div class="form-group">
       <label for="disabledTextInput">City</label>
-      <input type="text" id="disabledTextInput" class="form-control" value="City">
+      <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_City"], $sodium); ?>">
     </div>
 
     <div class="form-group">
       <label for="disabledTextInput">State</label>
-      <input type="text" id="disabledTextInput" class="form-control" value="State">
+      <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_State"], $sodium); ?>">
     </div>
 
     <div class="form-group">
       <label for="disabledTextInput">Zip Code</label>
-      <input type="text" id="disabledTextInput" class="form-control" value="Zip">
+      <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_Zip"], $sodium); ?>">
     </div>
 
     <div class="form-group">
       <label for="disabledTextInput">Home Phone</label>
-      <input type="text" id="disabledTextInput" class="form-control" value="Home Phone">
+      <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_HomePhone"], $sodium); ?>">
     </div>
 
     <div class="form-group">
       <label for="disabledTextInput">Work Phone</label>
-      <input type="text" id="disabledTextInput" class="form-control" value="Work Phone">
+      <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_WorkPhone"], $sodium); ?>">
     </div>
     
   </fieldset>
@@ -211,42 +248,42 @@
           <fieldset disabled>
             <div class="form-group">
               <label for="disabledTextInput">Marital Status</label>
-              <input type="text" id="disabledTextInput" class="form-control" value="Marital Status">
+              <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_MaritalStatus"], $sodium); ?>">
             </div>
         
             <div class="form-group">
               <label for="disabledTextInput">Weight</label>
-              <input type="text" id="disabledTextInput" class="form-control" value="Weight">
+              <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_Weight"], $sodium); ?>">
             </div>
         
             <div class="form-group">
               <label for="disabledSelect">Height</label>
-              <input type="text" id="disabledTextInput" class="form-control" value="Height">
+              <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_Height"], $sodium); ?>">
             </div>
         
             <div class="form-group">
               <label for="disabledTextInput">Blood Type</label>
-              <input type="text" id="disabledTextInput" class="form-control" value="Blood Type">
+              <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_BloodType"], $sodium); ?>">
             </div>
         
             <div class="form-group">
               <label for="disabledTextInput">Ethnicity</label>
-              <input type="text" id="disabledTextInput" class="form-control" value="Ethnicity">
+              <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_Ethnicity"], $sodium); ?>">
             </div>
         
             <div class="form-group">
               <label for="disabledTextInput">Primary Insurance</label>
-              <input type="text" id="disabledTextInput" class="form-control" value="Primary Insurance">
+              <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_PrimaryInsurance"], $sodium); ?>">
             </div>
         
             <div class="form-group">
               <label for="disabledTextInput">Primary Insurance Number</label>
-              <input type="text" id="disabledTextInput" class="form-control" value="Primary Insurance Number">
+              <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_PrimaryInsuranceNumber"], $sodium); ?>">
             </div>
         
             <div class="form-group">
               <label for="disabledTextInput">Primary Insurance Group</label>
-              <input type="text" id="disabledTextInput" class="form-control" value="Primary Insurance Group">
+              <input type="text" id="disabledTextInput" class="form-control" value="<?php echo decryptSodium($patientData["MID_PrimaryInsuranceGroupNumberOrMainPH"], $sodium); ?>">
             </div>
           </fieldset>
         </form>
@@ -319,36 +356,6 @@
       feather.replace()
     </script>
 
-    <!-- Graphs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-    <script>
-      var ctx = document.getElementById("myChart");
-      var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-          datasets: [{
-            data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
-            lineTension: 0,
-            backgroundColor: 'transparent',
-            borderColor: '#007bff',
-            borderWidth: 4,
-            pointBackgroundColor: '#007bff'
-          }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: false
-              }
-            }]
-          },
-          legend: {
-            display: false,
-          }
-        }
-      });
-    </script>
+  
   </body>
 </html>
