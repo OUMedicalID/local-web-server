@@ -1,8 +1,9 @@
 <?php
+include("mysqlCredentials.php");
 
 $servername = "localhost";
 $username = "root";
-$password = "medIDOU002!";
+$password = $MYSQL_Password;
 $dbname = "localWebServer";
 date_default_timezone_set('US/Eastern');
 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); // Initialize

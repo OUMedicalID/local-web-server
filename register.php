@@ -1,10 +1,10 @@
 <?php
 include("AES.php");
-
+include("mysqlCredentials.php"); 
 
 $servername = "localhost";
 $username = "root";
-$password = "medIDOU002!";
+$password = $MYSQL_Password;
 $dbname = "localWebServer";
 date_default_timezone_set('US/Eastern');
 
