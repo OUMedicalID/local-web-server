@@ -2,9 +2,9 @@
 include("AES.php");
 include("mysqlCredentials.php"); 
 session_start();
-if(!isset($_SESSION["isLoggedIn"]))exit();
+if(!isset($_SESSION["isLoggedIn"]))exit("Not logged in");
 // We could also do a POST.
-if(!isset($_GET["id"]))exit();
+if(!isset($_GET["id"]))exit("Invalid ID");
 $id = (int)$_GET["id"];
 
 
@@ -309,19 +309,23 @@ function decryptSodium($data, $sodium){
           <div class="column">
               <h6>Medical Conditions</h6>
               <ul>
-                  <li>Something</li>
-                  <li>Something</li>
-                  <li>Something</li>
-                  <li>Something</li>
+                  <?php
+                  $array = json_decode(decryptSodium($patientData["MID_Conditions"],$sodium),true);
+                  foreach($array as $a){
+                    echo '<li>'.$a.'</li>';
+                  }
+                  ?>
               </ul>
           </div>
           <div class="column">
               <h6>Injuries</h6>
               <ul>
-                  <li>Something</li>
-                  <li>Something</li>
-                  <li>Something</li>
-                  <li>Something</li>
+                   <?php
+                  $array = json_decode(decryptSodium($patientData["MID_Injuries"],$sodium),true);
+                  foreach($array as $a){
+                    echo '<li>'.$a.'</li>';
+                  }
+                  ?>
               </ul>
           </div>
       </div>
