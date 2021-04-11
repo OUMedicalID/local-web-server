@@ -3,7 +3,7 @@
 //Change info to local web server when ready
 $servername = "localhost";
 $username = "tlliu";
-$password = "TacoBell1";
+$password = "xxxxxxx";
 $dbname = "medicalid";
 
 //Website Method
