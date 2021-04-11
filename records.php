@@ -1,4 +1,31 @@
-<!doctype html>
+<?php
+include("AES.php");
+include('exportExcelLibrary.php');
+include("mysqlCredentials.php");
+session_start();
+if(!isset($_SESSION["isLoggedIn"]))exit("Not logged in");
+
+$servername = "localhost";
+$username = "root";
+$password = $MYSQL_Password;
+$dbname = "localWebServer";
+
+
+$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); // Initialize the connection.
+$stmt = $conn->prepare("SELECT * FROM staff WHERE username=:username"); 
+$stmt->execute(['username' => $_SESSION["username"]]); 
+$row = $stmt->fetch(); 
+$sodium = hex2bin(decrypt($_SESSION["shaPass"], $row["localKey"]));
+
+function decryptSodium($data, $sodium){
+  $data = sodium_crypto_box_seal_open(hex2bin($data), $sodium);
+  if($data == "")$data = "** Not Filled Out **";
+  return $data;
+}
+
+
+
+?><!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -96,7 +123,7 @@
 
           <ul class="nav flex-column mb-2">
             <li class="nav-item">
-              <a class="nav-link" href="download.php">
+              <a class="nav-link" href="download.html">
                 <span data-feather="file-text"></span>
                 Download All Data
               </a>
@@ -167,43 +194,33 @@
 
             <?php
 
-            //Change info to local web server when ready
-            $servername = "localhost";
-            $username = "********";
-            $password = "********";
-            $dbname = "********";
-
+           
             //Website Method
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); // Initialize the connection.
-            $stmt = $conn->query("SELECT * FROM users ORDER BY MID_AccessDate DESC");
+            $stmt = $conn->query("SELECT * FROM patients ORDER BY checkIn_Time DESC");
             $patientRecords = '';
 
+
+
+            //if ($stmt) {
             while ($row = $stmt->fetch()) {
-
-              //To make the date easier to read
-              if (!$row["MID_AccessDate"]) {
-                $formattedDate = '';
-              } else {
-                $format = 'Y-m-d H:i:s';
-                $date = DateTime::createFromFormat($format, $row["MID_AccessDate"]);
-                $formattedDate = $date->format('M-d-Y H:i:s');
-              }
-
-              $patientRecords .= "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table'>";
-              $patientRecords .= "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>" . $row["MID_Name"] . "</td>";
-              $patientRecords .= "<td data-value='100'>" . $row["MID_Gender"] . "</td>";
-              $patientRecords .= "<td data-text='no'>" . $row["MID_Birthday"] . "</td>";
-              $patientRecords .= "<td>" . $row["MID_State"] . "</td>";
-              $patientRecords .= "<td data-text=''>" . $row["MID_HomePhone"] . "</td>";
-              $patientRecords .= "<td data-text=''>" . $formattedDate . "</td>";
+              $patientRecords .= "<tr id='tr-id-0' class='tr-class-0' data-title='bootstrap table' data-name='Ash Ketchum'>";
+              $patientRecords .= "<td id='td-id-0' class='td-class-0' data-title='bootstrap table'>" . decryptSodium($row["MID_Name"],$sodium) . "</td>";
+              $patientRecords .= "<td data-value='100'>" . decryptSodium($row["MID_Gender"],$sodium) . "</td>";
+              $patientRecords .= "<td data-text='no'>" . decryptSodium($row["MID_Birthday"],$sodium) . "</td>";
+              $patientRecords .= "<td>" . decryptSodium($row["MID_City"],$sodium) . "</td>";
+              $patientRecords .= "<td data-text=''>" . decryptSodium($row["MID_HomePhone"],$sodium) . "</td>";
+              //Change conditions to check-in time when ready
+              $patientRecords .= "<td data-text=''>" . decryptSodium($row["checkIn_Time"],$sodium) . "</td>";
               $patientRecords .= "<td data-i18n='Actions'>";
-              //<button type="submit" class="searchSubmit" id="searchPatientButton"><i class="fa fa-search"></i></button>
-              $patientRecords .= "<form action='template.php' name = 'searchIndividualForm' method='post'>";
-              $patientRecords .= "<input name = 'searchIndividual' type='hidden' value='" . $row["email"] . "'/>";
-              $patientRecords .= "<button type = 'submit' class='like searchSubmit' style = 'color:blue' title='Like'><i class='fas fa-search'></i></button>";
-              //$patientRecords .= "<a class='like individualSearch' style = 'color:blue' title='Like' data-name='" . $row["email"] . "'><i class='fas fa-search'></i></a>";
-              $patientRecords .= "</form></td></tr>";
+              $patientRecords .= "<a class='like' href='personalInfo.php?id=".$row["record_ID"]."' title='Like'><i class='fas fa-search'></i></a>";
+              $patientRecords .= "</td></tr>";
             }
+            //} else {
+            //  echo 'Data Not found';
+            //}
+
+            // echo Everytjing
 
             echo $patientRecords;
 
@@ -258,7 +275,7 @@
 
         //Show table rows based on the row class names that are like the search input
         var searchValue = $("#searchPatient").val();
-        if (searchValue) {
+        if (searchValue != '') {
 
           //To hide the pagination stuff since it conflicts with the search by name bar
           $(".fixed-table-pagination").hide();
@@ -281,17 +298,6 @@
           $("#tbody").html('');
 
         }
-      });
-      //This code sends the email when the search icon is clicked on the row
-      //The "on" is used instead of "onClick" because the search icon won't work after page is already loaded
-
-      //Might not be needed if there is a submit for in the html already
-      $(document).on('click', '.individualSearch', function() {
-        $individualEmail = $(this).attr("data-name");
-        //alert($individualEmail);
-        console.log($individualEmail);
-        //$(this).searchIndividualForm.submit();
-        document.searchIndividualForm.submit();
       });
     });
   </script>
