@@ -164,8 +164,7 @@ function decryptSodium($data, $sodium){
             <h1 class="h2">Dashboard</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
-                <button class="btn btn-sm btn-outline-secondary">Share</button>
-                <button class="btn btn-sm btn-outline-secondary">Export</button>
+                <button onclick="downloadPDF()" class="btn btn-sm btn-outline-secondary">Export</button>
               </div>
 
              <!-- <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
@@ -360,6 +359,41 @@ function decryptSodium($data, $sodium){
     <script>
       feather.replace()
     </script>
+
+
+<?php
+$postData = "";
+foreach($patientData as $key=>$value){
+	if(is_numeric($key) || $key == "record_ID" || $key == "checkIn_Time")continue;
+	$postData .= $key."=".decryptSodium($value, $sodium)."&";
+}
+
+$postData = rtrim($postData, '&');
+
+?>
+
+
+    <script>
+	function downloadPDF() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      //document.getElementById("demo").innerHTML = this.responseText;
+      console.log(this.responseText);
+      //var obj = JSON.parse(this.responseText);
+      //document.getElementById("passInfo").innerHTML = "Password to excel file is: "+obj["password"];
+      //window.open(obj["link"], "_blank");
+      
+    }
+  };
+
+  
+
+    xhttp.open("POST", "ajaxDownloadPDF.php", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send('<?php echo $postData; ?>');
+}
+</script>
 
   
   </body>

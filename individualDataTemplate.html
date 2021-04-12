@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Medical ID</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet">
+
+    <style>
+      .row{clear:both}
+
+    .column{
+    width: 50%;
+    float: left;
+    }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Medical ID</a>
+      <input class="form-control form-control-dark w-100" type="text" placeholder="Search Patient" aria-label="Search Patient">
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="signin.html">Sign out</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="template.html">
+                  <span data-feather="home"></span>
+                  Dashboard <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="records.php">
+                  <span data-feather="search"></span>
+                  Search Records
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="userSettings.html">
+                  <span data-feather="tool"></span>
+                  Account Settings
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="adminSettings.html">
+                  <span data-feather="settings"></span>
+                  Admin Settings
+                </a>
+              </li>
+
+              <!--<li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="bar-chart-2"></span>
+                  Reports
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="layers"></span>
+                  Integrations
+                </a>
+              </li>-->
+
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>All Data</span>
+              <!--<a class="d-flex align-items-center text-muted" href="#">
+                <span data-feather="plus-circle"></span>
+              </a>-->
+            </h6>
+
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="download.html">
+                  <span data-feather="file-text"></span>
+                  Download All Data
+                </a>
+              </li>
+
+
+            </ul>
+          </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1 class="h2" style="text-align: center;"><img src="assets/logo.jpg" width="5%" style="border-radius: 5px;" />&nbsp;Medical ID - @_NAME_@&nbsp; <img src="assets/hippa.jpeg" style="width: 13%;"></h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="btn-group mr-2">
+              </div>
+
+             <!-- <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                <span data-feather="calendar"></span>
+                This week
+              </button>-->
+            </div>
+          </div>
+  
+   <p style="text-align: justify; font-weight: bold;">The information contained in this document contains privileged and confidential information, including patient information protected by federal and state privacy laws. It is intended only for medical personnel. If you are not the intended recipient, you are hereby notified that any review, dissemination, distribution, or duplication of this document is strictly prohibited. If you are not the intended recipient, please contact the sender and destroy all copies of this document.</p>
+   
+
+
+      <div class="row">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Personal Information</h5>     
+          <form>
+  <fieldset >
+    <div class="form-group">
+      <label for="TextInput">Name</label>
+      <input type="text" id="TextInput" class="form-control" value="@_NAME_@">
+    </div>
+
+    <div class="form-group">
+      <label for="TextInput">Birthdate</label>
+      <input type="text" id="TextInput" class="form-control" value="@_DOB_@">
+    </div>
+
+    <div class="form-group">
+      <label for="Select">Gender</label>
+      <input type="text" id="TextInput" class="form-control" value="@_GENDER_@">
+    </div>
+
+    <div class="form-group">
+      <label for="TextInput">Address 1</label>
+      <input type="text" id="TextInput" class="form-control" value="@_ADDRESS1_@">
+    </div>
+
+    <div class="form-group">
+      <label for="TextInput">Address 2</label>
+      <input type="text" id="TextInput" class="form-control" value="@_ADDRESS2_@">
+    </div>
+
+    <div class="form-group">
+      <label for="TextInput">City</label>
+      <input type="text" id="TextInput" class="form-control" value="@_CITY_@">
+    </div>
+
+    <div class="form-group">
+      <label for="TextInput">State</label>
+      <input type="text" id="TextInput" class="form-control" value="@_STATE_@">
+    </div>
+
+    <div class="form-group">
+      <label for="TextInput">Zip Code</label>
+      <input type="text" id="TextInput" class="form-control" value="@_ZIP_@">
+    </div>
+
+    <div class="form-group">
+      <label for="TextInput">Home Phone</label>
+      <input type="text" id="TextInput" class="form-control" value="@_HOMEP_@">
+    </div>
+
+    <div class="form-group">
+      <label for="TextInput">Work Phone</label>
+      <input type="text" id="TextInput" class="form-control" value="@_WORKP_@">
+    </div>
+    
+  </fieldset>
+</form>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-sm-12">
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Other Personal Information</h5>
+        <form>
+          <fieldset >
+            <div class="form-group">
+              <label for="TextInput">Marital Status</label>
+              <input type="text" id="TextInput" class="form-control" value="@_MARITAL_@">
+            </div>
+        
+            <div class="form-group">
+              <label for="TextInput">Weight</label>
+              <input type="text" id="TextInput" class="form-control" value="@_WEIGHT_@">
+            </div>
+        
+            <div class="form-group">
+              <label for="Select">Height</label>
+              <input type="text" id="TextInput" class="form-control" value="@_HEIGHT_@">
+            </div>
+        
+            <div class="form-group">
+              <label for="TextInput">Blood Type</label>
+              <input type="text" id="TextInput" class="form-control" value="@_BLOODTYPE_@">
+            </div>
+        
+            <div class="form-group">
+              <label for="TextInput">Ethnicity</label>
+              <input type="text" id="TextInput" class="form-control" value="@_ETHNICITY_@">
+            </div>
+        
+            <div class="form-group">
+              <label for="TextInput">Primary Insurance</label>
+              <input type="text" id="TextInput" class="form-control" value="@_PI_@">
+            </div>
+        
+            <div class="form-group">
+              <label for="TextInput">Primary Insurance Number</label>
+              <input type="text" id="TextInput" class="form-control" value="@_PIN_@">
+            </div>
+        
+            <div class="form-group">
+              <label for="TextInput">Primary Insurance Group</label>
+              <input type="text" id="TextInput" class="form-control" value="@_PIGROUP_@">
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  
+
+
+
+</div>
+<br>
+
+
+<div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Other Personal Information</h5>
+        
+        <div class="row">
+          <div class="column">
+              <h6>&nbsp;Medical Conditions</h6>
+              <ul>
+                  <li>Back Pain</li><li>Shoulder Pain</li>              </ul>
+          </div>
+          <div class="column">
+              <h6>Injuries</h6>
+              <ul>
+                                 </ul>
+          </div>
+      </div>
+
+      </div>
+      </div>
+    </div>
+
+
+
+
+
+</main>
+              
+              
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="js/vendor/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+   
+  </body>
+</html>
