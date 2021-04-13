@@ -1,4 +1,80 @@
-<!doctype html>
+<?php
+include("AES.php");
+include('exportExcelLibrary.php');
+include("mysqlCredentials.php");
+session_start();
+if(!isset($_SESSION["isLoggedIn"]))exit("Not logged in");
+
+$servername = "localhost";
+$username = "root";
+$password = $MYSQL_Password;
+$dbname = "localWebServer";
+
+
+$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); // Initialize the connection.
+$stmt = $conn->prepare("SELECT * FROM staff WHERE username=:username"); 
+$stmt->execute(['username' => $_SESSION["username"]]); 
+$row = $stmt->fetch(); 
+$sodium = hex2bin(decrypt($_SESSION["shaPass"], $row["localKey"]));
+
+function decryptSodium($data, $sodium){
+  $data = sodium_crypto_box_seal_open(hex2bin($data), $sodium);
+  if($data == "")$data = "** Not Filled Out **";
+  return $data;
+}
+
+if(isset($_POST["formSubmitted"])){
+   $continue = true;
+   $firstName = $_POST['FirstName'];
+   $lastName = $_POST['LastName'];
+
+   if(!ctype_alpha($firstName) || !ctype_alpha($lastName))$continue = false;
+   if(strlen($firstName) > 120 || strlen($lastName) > 120)$continue = false;
+
+   if($continue){
+
+     $stmt = $conn->prepare("UPDATE staff SET firstName=:firstName, lastName=:lastName WHERE username=:username");
+     $data = [
+        'firstName' => $firstName,
+        'lastName' => $lastName,
+        'username' => $_SESSION["username"]
+      ];
+      $stmt->execute($data);
+  }
+}
+
+
+if(isset($_POST["currentPassword"])){
+
+  if (password_verify($_POST["currentPassword"], $row["password"])) {
+      $pattern = '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z]).{8,}$/';
+      if(preg_match($pattern, $_POST["inputNewPassword"])){
+          if($_POST["inputNewPassword"] == $_POST["confirmNewPassword"]){
+
+            $newUnhashedPassword = $_POST["inputNewPassword"];
+            $_SESSION["shaPass"] = hash("sha512", $newUnhashedPassword);
+            $newLocalKey = encrypt($newUnhashedPassword, bin2hex($sodium));
+
+            $stmt = $conn->prepare("UPDATE staff SET password=:password, localKey=:localKey WHERE username=:username");
+            $data = [
+                'password' => password_hash($newUnhashedPassword, PASSWORD_DEFAULT),
+                'localKey' => $newLocalKey,
+                'username' => $_SESSION["username"]
+              ];
+            $stmt->execute($data);
+
+            echo "Password is changed.";
+
+          }
+      }
+  }
+
+}
+
+
+
+
+?><!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -128,40 +204,42 @@
   
             
    <h4 class="h4">User Info</h4>  
-   <form action="userSettings.php" method="POST">
-  <div class="form-row">
-    <div class="col">
-      <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="First name">
+
+
+  <form action="userSettings.php" method="POST">
+    <div class="form-row">
+      <div class="col">
+        <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="First name" value="<?php echo $row["firstName"]; ?>">
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Last name" value="<?php echo $row["lastName"]; ?>">
+      </div>
     </div>
-    <div class="col">
-      <input type="text" class="form-control" id="LastName" name="LastName" placeholder="Last name">
-    </div>
-  </div>
            
    
    <br>
    
-<h4 class="h4">Update Password</h4>
+  <h4 class="h4">Update Password</h4>
           <div class="card">
   <div class="card-body">
       <h5 class="h5">Current Password</h5>
        <label for="currentPassword" class="sr-only">Password</label>
-      <input type="password" id="currentPassword" class="form-control" name="currentPassword" placeholder="Current Password" required>
+      <input type="password" id="currentPassword" class="form-control" name="currentPassword" placeholder="Current Password">
       <div class="checkbox mb-3"></div>
       <h5 class="h5">New Password</h5>
       <label for="inputNewPassword" class="sr-only">Password</label>
-      <input type="password" id="inputNewPassword" class="form-control" name="inputNewPassword" placeholder="New Password" required>
+      <input type="password" id="inputNewPassword" class="form-control" name="inputNewPassword" placeholder="New Password">
       <div class="checkbox mb-3"></div>
       <h5 class="h5">Confirm New Password</h5>
       <label for="confirmNewPassword" class="sr-only">Password</label>
-      <input type="password" id="confirmNewPassword" class="form-control" name="confirmNewPassword" placeholder="Confirm New Password" required>
+      <input type="password" id="confirmNewPassword" class="form-control" name="confirmNewPassword" placeholder="Confirm New Password">
       <div class="checkbox mb-3"></div>
     </div>
 
 </div>
 <br>
+<input type="hidden" name="formSubmitted" value="true" />
 <input type="submit" class="btn btn-primary" value="Submit"></button>
-
 </form>
 </main>
               
@@ -180,36 +258,6 @@
       feather.replace()
     </script>
 
-    <!-- Graphs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-    <script>
-      var ctx = document.getElementById("myChart");
-      var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-          datasets: [{
-            data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
-            lineTension: 0,
-            backgroundColor: 'transparent',
-            borderColor: '#007bff',
-            borderWidth: 4,
-            pointBackgroundColor: '#007bff'
-          }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: false
-              }
-            }]
-          },
-          legend: {
-            display: false,
-          }
-        }
-      });
-    </script>
+    
   </body>
 </html>
