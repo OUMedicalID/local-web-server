@@ -1,69 +1,87 @@
 <?php
-  include("AES.php");
-  include("mysqlCredentials.php"); 
+include("AES.php");
+include('exportExcelLibrary.php');
+include("mysqlCredentials.php");
+session_start();
+if(!isset($_SESSION["isLoggedIn"]))exit("Not logged in");
 
-  $servername = "localhost";
-  $username = "root";
-  $password = $MYSQL_Password;
-  $dbname = "localWebServer";
-  date_default_timezone_set('US/Eastern');
-
-  $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-
-  $sql = "SELECT count(*) FROM `staff`"; 
-  $result = $conn->prepare($sql); 
-  $result->execute(); 
-  $number_of_rows = $result->fetchColumn(); 
-  if((int)$number_of_rows !== 0)exit();
+$servername = "localhost";
+$username = "root";
+$password = $MYSQL_Password;
+$dbname = "localWebServer";
 
 
-  if($_POST["create"] == "true"){
+$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); // Initialize the connection.
+$stmt = $conn->prepare("SELECT * FROM staff WHERE username=:username"); 
+$stmt->execute(['username' => $_SESSION["username"]]); 
+$row = $stmt->fetch(); 
+$sodium = hex2bin(decrypt($_SESSION["shaPass"], $row["localKey"]));
 
-    $continue = true;
+if($row["isAdmin"] == 0){
+  // Not an admin.
+  exit();
+}
 
-      if($_POST["password"] !== $_POST["confirmpass"]){
-        $passwordMismatch = true;
-        $continue = false;
+
+if(isset($_POST["editLogoutTime"])){
+  $newTime = (int)$_POST["logoutTime"];
+  $stmt = $conn->prepare("UPDATE settings SET auto_logout_min=:auto_logout_min LIMIT 1");
+  $data = ['auto_logout_min' => $newTime];
+  $stmt->execute($data);
+}
+
+if(isset($_POST["newUser"])){
+   $zero = 0;
+   $continue = true;
+   $firstName = $_POST['fname'];
+   $lastName = $_POST['lname'];
+
+   if(!ctype_alpha($firstName) || !ctype_alpha($lastName))$continue = false;
+   if(strlen($firstName) > 120 || strlen($lastName) > 120)$continue = false;
+
+   // Check that username doesn't already exist
+
+   $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); // Initialize the connection.
+   $stmt = $conn->prepare("SELECT * FROM staff WHERE username=:username"); 
+   $stmt->execute(['username' => $_POST["username"]]); 
+   $row = $stmt->fetch(); 
+   if(count($row) > 1)$continue = false;
+
+
+   if($continue){
+      $pattern = '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z]).{8,}$/';
+      if(preg_match($pattern, $_POST["password"])){
+          if($_POST["password"] == $_POST["confirmpass"]){
+
+            $newUnhashedPassword = $_POST["password"];
+            $newLocalKey = encrypt($newUnhashedPassword, bin2hex($sodium));
+            $stmt = $conn->prepare("INSERT INTO staff (username, password, firstName, lastName, isAdmin, localKey) VALUES (:username, :password, :firstName, :lastName, :isAdmin, :localKey)");
+            $data = [
+                'username' => $_POST["username"],
+                'password' => password_hash($newUnhashedPassword, PASSWORD_DEFAULT),
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+                'isAdmin' => $zero,
+                'localKey' => $newLocalKey
+              ];
+            $stmt->execute($data);
+
+            //echo "Password is changed.";
+
+          }
       }
-
-       $pattern = '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z]).{8,}$/';
-      if(!preg_match($pattern, $_POST["password"])){
-         $strengthFailed = true;
-         $continue = false;
-       }
-
-      if(!ctype_alnum($_POST["username"])){
-        $invalidUsername = true;
-        $continue = false;
-      }
-
-      if($_POST["fname"] == $_POST[" "]){
-         $continue = false;
-      }
-
-      if($_POST["lname"] == $_POST[" "]){
-         $continue = false;
-      }
-
-      if($continue){
-        $salt = sodiumGenerate();
-        $public_key = bin2hex($salt["public_key"]);
-        $private = bin2hex($salt["keypair"]);
+}
 
 
 
-        $stmt = $conn->prepare("INSERT INTO staff (username,password,isAdmin,localKey,firstName, lastName) VALUES (?,?,?,?,?,?)");
-        $stmt->execute([strtolower($_POST["username"]), $password, false, encrypt($_POST["password"], $private) ,$_POST["fname"], $_POST["lname"]]);
-      }
+}
 
 
 
-  }
 
 ?>
 
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -84,7 +102,7 @@
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Medical ID</a>
-      <input class="form-control form-control-dark w-100" type="text" placeholder="Search Patient" aria-label="Search Patient">
+      
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
           <a class="nav-link" href="signin.html">Sign out</a>
@@ -92,90 +110,7 @@
       </ul>
     </nav>
 
-    <div class="container-fluid">
-      <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link" href="template.html">
-                  <span data-feather="home"></span>
-                  Dashboard <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="records.php">
-                  <span data-feather="search"></span>
-                  Search Records
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="userSettings.html">
-                  <span data-feather="tool"></span>
-                  Account Settings
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="adminSettings.html">
-                  <span data-feather="settings"></span>
-                  Admin Settings
-                </a>
-              </li>
-
-              <!--<li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="bar-chart-2"></span>
-                  Reports
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="layers"></span>
-                  Integrations
-                </a>
-              </li>-->
-
-            </ul>
-
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>All Data</span>
-              <!--<a class="d-flex align-items-center text-muted" href="#">
-                <span data-feather="plus-circle"></span>
-              </a>-->
-            </h6>
-
-            <ul class="nav flex-column mb-2">
-              <li class="nav-item">
-                <a class="nav-link" href="download.html">
-                  <span data-feather="file-text"></span>
-                  Download All Data
-                </a>
-              </li>
-<!--
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Last quarter
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Social engagement
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Year-end sale
-                </a>
-              </li>
-            -->
-
-
-            </ul>
-          </div>
-        </nav>
+<?php include("menu.php"); ?>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
@@ -199,7 +134,7 @@
               <input type="number" min="1" class="form-control" id="logoutTime" name="logoutTime" placeholder="Number (in Minutes)">
             </div>
             
-
+            <input type="hidden" name="editLogoutTime" value="true" />
             <button type="submit" class="btn btn-primary">Save Settings</button>
           </form>
 
@@ -210,7 +145,7 @@
           <div class="card">
   <h5 class="card-header">Create New User</h5>
   <div class="card-body">
-   <form>
+   <form action="adminSettings.php" method="POST">
   <div class="form-group row">
     <label for="inputEmail3" class="col-sm-2 col-form-label">username</label>
     <div class="col-sm-10">
@@ -245,7 +180,7 @@
 
   <div class="form-group row">
     <div class="col-sm-10">
-      <input type="hidden" name="create" value="true">
+      <input type="hidden" name="newUser" value="true" />
       <button type="submit" class="btn btn-primary">Create</button>
     </div>
   </div>
@@ -281,34 +216,5 @@
 
     <!-- Graphs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-    <script>
-      var ctx = document.getElementById("myChart");
-      var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-          datasets: [{
-            data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
-            lineTension: 0,
-            backgroundColor: 'transparent',
-            borderColor: '#007bff',
-            borderWidth: 4,
-            pointBackgroundColor: '#007bff'
-          }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: false
-              }
-            }]
-          },
-          legend: {
-            display: false,
-          }
-        }
-      });
-    </script>
   </body>
 </html>

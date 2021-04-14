@@ -48,52 +48,9 @@ if(!isset($_SESSION["isLoggedIn"]))exit("Not logged in");
         </ul>
     </nav>
 
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="template.html">
-                                <span data-feather="home"></span>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="records.php">
-                                <span data-feather="search"></span>
-                                Search Records
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="userSettings.html">
-                                <span data-feather="tool"></span>
-                                Account Settings
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="adminSettings.html">
-                                <span data-feather="settings"></span>
-                                Admin Settings
-                            </a>
-                        </li>
+   <?php include("menu.php"); ?>
 
-                    </ul>
 
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>All Data</span>
-                    </h6>
-
-                    <ul class="nav flex-column mb-2">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="download.php">
-                                <span data-feather="file-text"></span>
-                                Download All Data
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 downloadCenter">
                 <div class="border-bottom pageTitle">
                     <h1 class="h2">Simulate Patient Data Entry</h1>
