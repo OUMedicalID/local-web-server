@@ -90,6 +90,7 @@ function decryptSodium($data, $sodium){
             </div>
           </div>
 
+          <h5 style="text-align: center;" id="passInfo"></h5>
 
           <div class="row">
   <div class="col-sm-6">
@@ -295,10 +296,16 @@ $postData = rtrim($postData, '&');
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       //document.getElementById("demo").innerHTML = this.responseText;
+      
       console.log(this.responseText);
-      //var obj = JSON.parse(this.responseText);
-      //document.getElementById("passInfo").innerHTML = "Password to excel file is: "+obj["password"];
-      //window.open(obj["link"], "_blank");
+      var obj = JSON.parse(this.responseText);
+      document.getElementById("passInfo").innerHTML = "Password to PDF file is: "+obj["password"];
+      
+      // Simulate click with download attribute to download the PDF instead of viewing in-browser.
+      var a = document.createElement('a');
+      a.href = obj["link"];
+      a.download = 'patientRecord_enc_'+Math.floor(Math.random() * 100);
+      a.click();
       
     }
   };
@@ -309,6 +316,9 @@ $postData = rtrim($postData, '&');
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send('<?php echo $postData; ?>');
 }
+
+
+
 </script>
 
   
