@@ -4,19 +4,19 @@
         <div class="sidebar-sticky">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link active" href="records.php">
+              <a class="nav-link <?php if(basename($_SERVER['PHP_SELF']) == "records.php") echo " active"; ?>" href="records.php">
                 <span data-feather="search"></span>
                 Search Records
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="userSettings.php">
+              <a class="nav-link <?php if(basename($_SERVER['PHP_SELF']) == "userSettings.php") echo " active"; ?>" href="userSettings.php">
                 <span data-feather="tool"></span>
-                Account Settings
+                User Settings
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="adminSettings.php">
+              <a class="nav-link <?php if(basename($_SERVER['PHP_SELF']) == "adminSettings.php") echo " active"; ?>" href="adminSettings.php">
                 <span data-feather="settings"></span>
                 Admin Settings
               </a>
@@ -34,7 +34,7 @@
 
           <ul class="nav flex-column mb-2">
             <li class="nav-item">
-              <a class="nav-link" href="simulation.php">
+              <a class="nav-link <?php if(basename($_SERVER['PHP_SELF']) == "simulation.php") echo " active"; ?>" href="simulation.php">
                 <span data-feather="smartphone"></span>
                 Simulate NFC Scan
               </a>
@@ -43,7 +43,7 @@
 
           <ul class="nav flex-column mb-2">
             <li class="nav-item">
-              <a class="nav-link" href="download.php">
+              <a class="nav-link <?php if(basename($_SERVER['PHP_SELF']) == "download.php") echo " active"; ?>" href="download.php">
                 <span data-feather="file-text"></span>
                 Download All Data
               </a>
